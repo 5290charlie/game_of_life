@@ -72,6 +72,14 @@ class Cell {
     }
   }
 
+  public function toggle() {
+    if (alive) {
+      die();
+    } else {
+      live();
+    }
+  }
+
   public function alive_neighbors() {
     var num:Int = 0;
 

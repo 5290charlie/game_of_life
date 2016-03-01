@@ -27,19 +27,13 @@ class Grid implements ArrayAccess<Array<Cell>> {
     cols = h;
 
     for (i in 0...w) {
-#if cpp
-        this.cells.push(new Array());
-#else
-        this[i] = new Array<Cell>();
-#end
+      var row:Array<Cell> = new Array();
 
       for (j in 0...h) {
-#if cpp
-        this.cells[i].push(new Cell(i,j,this));
-#else
-        this[i][j] = new Cell(i,j,this);
-#end
+        row.push(new Cell(i, j, this));
       }
+
+      this.__set(i, row);
     }
   }
 
@@ -116,6 +110,8 @@ class Grid implements ArrayAccess<Array<Cell>> {
   }
 
   public function randomize() {
+    clear();
+    
     for (x in 0...rows) {
       for (y in 0...cols) {
         var r:Float = Math.random();
@@ -145,85 +141,3 @@ class Grid implements ArrayAccess<Array<Cell>> {
 #end
   }
 }
-
-
-// import haxe.ds.Vector;
-//
-// class Grid implements ArrayAccess<Vector<Cell>> {
-//   public var rows: Int;
-//   public var cols: Int;
-//   public var alive: Array<Cell>;
-//   public var cells: Vector<Vector<Cell>>;
-//
-//   public function new(w:Int, h:Int) {
-//     alive = new Array();
-//
-//     rows = w;
-//     cols = h;
-//
-//     for (i in 0...w) {
-//       this.cells[i] = new Vector<Cell>(h);
-//       // this[i] = new Vector<Cell>(h);
-//
-//       for (j in 0...h) {
-//         this.cells[i][j] = new Cell(i,j,this);
-//       }
-//     }
-//   }
-//
-//   public function iterate() {
-//     var new_alive: Array<Cell> = new Array();
-//
-//     for (x in 0...rows) {
-//       for (y in 0...cols) {
-//         var cell = this[x][y];
-//
-//         var num:Int = cell.alive_neighbors();
-//
-//         if (cell.alive) {
-//           if (num < 2) {
-//             // make_dead(x,y);
-//           } else if (num == 2 || num == 3) {
-//             new_alive.push(cell);
-//             // make_alive(x,y);
-//           } else if (num > 3) {
-//             // make_dead(x,y);
-//           }
-//         } else {
-//           if (num == 3) {
-//             new_alive.push(cell);
-//             // make_alive(x,y);
-//           }
-//         }
-//       }
-//     }
-//
-//     for (c in alive) {
-//       c.die();
-//     }
-//
-//     for (c in new_alive) {
-//       c.live();
-//     }
-//
-//     alive = new_alive;
-//   }
-//
-//   // public function get_row(k:Int) {
-//   //   return cells[k];
-//   // }
-//   //
-//   // public function set_row(k:Int, v:Vector<Cell>):Vector<Cell> {
-//   //   return cells[k] = v;
-//   // }
-//
-//   @:arrayAccess
-//   public inline function __get(k:Int) {
-//     return this.cells[k];
-//   }
-//
-//   @:arrayAccess
-//   public inline function __set(k:Int, v:Vector<Cell>):Vector<Cell> {
-//       return this.cells[k] = v;
-//   }
-// }
